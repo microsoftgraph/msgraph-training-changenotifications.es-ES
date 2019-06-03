@@ -1,0 +1,17 @@
+<!-- markdownlint-disable MD002 MD041 -->
+
+<span data-ttu-id="89f77-101">Este tutorial le enseña a crear una aplicación principal .NET que use la API de Microsoft Graph para recibir notificaciones (webhooks) cuando una cuenta de usuario cambia en Azure Active Directory (Azure AD) y realizar consultas mediante la API de consulta Delta para recibir todos los cambios al usuario. cuentas desde que se realizó la última consulta.</span><span class="sxs-lookup"><span data-stu-id="89f77-101">This tutorial teaches you how to build a .NET Core app that uses the Microsoft Graph API to receive notifications (webhooks) when a user account changes in Azure Active Directory (Azure AD) and perform queries using the delta query API to receive all changes to user accounts since the last query was made.</span></span>
+
+> [!TIP]
+> <span data-ttu-id="89f77-102">Si prefiere descargar solo el tutorial completo, puede descargar o clonar el repositorio de [GitHub](https://github.com/microsoftgraph/msgraph-training-changenotifications).</span><span class="sxs-lookup"><span data-stu-id="89f77-102">If you prefer to just download the completed tutorial, you can download or clone the [GitHub repository](https://github.com/microsoftgraph/msgraph-training-changenotifications).</span></span>
+
+## <a name="prerequisites"></a><span data-ttu-id="89f77-103">Requisitos previos</span><span class="sxs-lookup"><span data-stu-id="89f77-103">Prerequisites</span></span>
+
+<span data-ttu-id="89f77-104">Antes de iniciar este tutorial, debe tener instalado [.net Core 2,2 SDK](https://dotnet.microsoft.com/download) y [Visual Studio Code](https://code.visualstudio.com/) en el equipo de desarrollo.</span><span class="sxs-lookup"><span data-stu-id="89f77-104">Before you start this tutorial, you should have [.NET Core 2.2 SDK](https://dotnet.microsoft.com/download) and [Visual Studio Code](https://code.visualstudio.com/) installed on your development machine.</span></span> <span data-ttu-id="89f77-105">Si no están instalados, visite los vínculos anteriores de opciones de descarga.</span><span class="sxs-lookup"><span data-stu-id="89f77-105">If you do not have them installed, visit the previous links for download options.</span></span>
+
+> [!NOTE]
+> <span data-ttu-id="89f77-106">Este tutorial se ha escrito con .NET Core versión 2,2.</span><span class="sxs-lookup"><span data-stu-id="89f77-106">This tutorial was written with .NET Core version 2.2.</span></span> <span data-ttu-id="89f77-107">Los pasos de esta guía pueden funcionar con otras versiones, pero no se han probado.</span><span class="sxs-lookup"><span data-stu-id="89f77-107">The steps in this guide may work with other versions, but that has not been tested.</span></span>
+
+## <a name="feedback"></a><span data-ttu-id="89f77-108">Comentarios</span><span class="sxs-lookup"><span data-stu-id="89f77-108">Feedback</span></span>
+
+<span data-ttu-id="89f77-109">Envíe sus comentarios sobre este tutorial en el [repositorio de github](https://github.com/microsoftgraph/msgraph-training-changenotifications).</span><span class="sxs-lookup"><span data-stu-id="89f77-109">Please provide any feedback on this tutorial in the [GitHub repository](https://github.com/microsoftgraph/msgraph-training-changenotifications).</span></span>
