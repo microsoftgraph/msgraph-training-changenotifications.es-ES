@@ -10,7 +10,9 @@ Abra el archivo **Startup.CS** y elimine la línea siguiente para deshabilitar e
 
 La aplicación usa varias clases de modelo nuevas para (de) la serialización de mensajes desde o hacia Microsoft Graph.
 
-Haga clic con el botón secundario en el árbol de archivos del proyecto y seleccione **nueva carpeta**. Asígnele el nombre **modelos** haga clic con el botón secundario en la carpeta **modelos** y agregue tres nuevos archivos:
+Haga clic con el botón secundario en el árbol de archivos del proyecto y seleccione **nueva carpeta**. Nombre **modelos** de ti
+
+Haga clic con el botón secundario en la carpeta **modelos** y agregue tres nuevos archivos:
 
 - **Notification.cs**
 - **ResourceData.cs**
@@ -103,7 +105,7 @@ namespace msgraphapp
 }
 ```
 
-Abra el archivo **Startup.CS** y reemplace el contenido por lo siguiente.
+Abra el archivo **Startup.CS** . Busque el método `ConfigureServices()` Method & sustitúyalo por el código siguiente:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)
@@ -136,9 +138,9 @@ Abra el archivo **appSettings. JSON** y reemplace el contenido por lo siguiente.
 
 Reemplace las siguientes variables con los valores copiados anteriormente:
 
-    - `<NGROK URL>`debe establecerse en la dirección URL https ngrok que copió anteriormente.
-    - `<TENANT ID>`debe ser su identificador de inquilino de Office 365, por ejemplo. **contoso.onmicrosoft.com**.
-    - `<APP ID>`y `<APP SECRET>` debe ser el identificador de la aplicación y el secreto que copió anteriormente al crear el registro de la aplicación.
+- `<NGROK URL>`debe establecerse en la dirección URL https ngrok que copió anteriormente.
+- `<TENANT ID>`debe ser el identificador de inquilino de Office 365, por ejemplo: **contoso.onmicrosoft.com**.
+- `<APP ID>`y `<APP SECRET>` debe ser el identificador de la aplicación y el secreto que copió anteriormente al crear el registro de la aplicación.
 
 ### <a name="add-notification-controller"></a>Agregar controlador de notificación
 
@@ -146,7 +148,7 @@ La aplicación requiere un nuevo controlador para procesar la suscripción y la 
 
 Haga clic con el `Controllers` botón secundario en la carpeta, seleccione **nuevo archivo**y asigne el nombre **NotificationsController.CS**al controlador.
 
-Reemplace el contenido de **NotificationController.CS** por lo siguiente:
+Reemplace el contenido de **NotificationController.CS** por el código siguiente:
 
 ```csharp
 using System;
@@ -244,23 +246,19 @@ namespace msgraphapp.Controllers
 
     private async Task<string> GetAccessToken()
     {
-        ClientCredential clientCredentials = new ClientCredential(secret: config.AppSecret);
+      IConfidentialClientApplication app = ConfidentialClientApplicationBuilder.Create(config.AppId)
+        .WithClientSecret(config.AppSecret)
+        .WithAuthority($"https://login.microsoftonline.com/{config.TenantId}")
+        .WithRedirectUri("https://daemon")
+        .Build();
 
-        var app = new ConfidentialClientApplication(
-            clientId: config.AppId,
-            authority: $"https://login.microsoftonline.com/{config.TenantId}",
-            redirectUri: "https://daemon",
-            clientCredential: clientCredentials,
-            userTokenCache: null,
-            appTokenCache: new TokenCache()
-        );
+      string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
 
-        string[] scopes = new string[] { "https://graph.microsoft.com/.default" };
+      var result = await app.AcquireTokenForClient(scopes).ExecuteAsync();
 
-        var result = await app.AcquireTokenForClientAsync(scopes);
-
-        return result.AccessToken;
+      return result.AccessToken;
     }
+
   }
 }
 ```

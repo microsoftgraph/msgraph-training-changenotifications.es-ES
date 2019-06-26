@@ -1,10 +1,10 @@
 <!-- markdownlint-disable MD002 MD041 -->
 
-Para que Microsoft Graph envíe notificaciones a la aplicación que se ejecuta en el equipo de desarrollo, necesita usar una herramienta como ngrok para realizar el túnel de llamadas desde Internet a su equipo. Ngrok permite que las llamadas desde Internet se dirijan a la aplicación que se ejecuta localmente sin necesidad de crear reglas de Firewall.
+Para que Microsoft Graph envíe notificaciones a la aplicación que se ejecuta en el equipo de desarrollo, debe usar una herramienta como ngrok para realizar el túnel de llamadas desde Internet a su equipo de desarrollo. Ngrok permite que las llamadas desde Internet se dirijan a la aplicación que se ejecuta localmente sin necesidad de crear reglas de Firewall.
 
 Antes de continuar, debe tener [ngrok](https://ngrok.com) instalado en el equipo de desarrollo. Si no tiene ngrok, visite el vínculo anterior para ver las opciones de descarga e instrucciones.
 
-Una vez instalado, ejecute ngrok.
+Ejecute ngrok ejecutando lo siguiente desde la línea de comandos:
 
 ```shell
 ngrok http 5000
@@ -21,7 +21,7 @@ Copie la dirección de reenvío https. En el ejemplo siguiente sería `https://7
 ngrok by @inconshreveable
 
 Session Status                online
-Account                       Basic
+Account                       ???? ???? (Plan: Free)
 Version                       2.3.15
 Region                        United States (us)
 Web Interface                 http://127.0.0.1:4040

@@ -2,43 +2,12 @@
 
 ### <a name="query-for-changes"></a>Consulta de cambios
 
-Microsoft Graph ofrece la posibilidad de consultar los cambios realizados en un recurso determinado desde la última vez que se llamó a él. Usar esto combinado con las notificaciones de cambios es un método eficaz para garantizar que no se pierda ningún cambio en los recursos.
+Microsoft Graph ofrece la posibilidad de consultar los cambios realizados en un recurso determinado desde la última vez que se llamó a él. El uso de esta opción, combinado con las notificaciones de cambios, permite un patrón sólido para garantizar que no se pierda ningún cambio en los recursos.
 
-Abra **NotificationsController.CS** y reemplace el `Post` método con el código siguiente:
+Busque y abra el siguiente controlador: **controllers > NotificationsController.CS**.
+Agregue el siguiente código a la clase `NotificationsController` existente.
 
-```csharp
-public ActionResult<string> Post([FromQuery]string validationToken = null)
-{
-  // handle validation
-  if(!string.IsNullOrEmpty(validationToken))
-  {
-    Console.WriteLine($"Received Token: '{validationToken}'");
-    return Ok(validationToken);
-  }
-
-  // handle notifications
-  using (StreamReader reader = new StreamReader(Request.Body))
-  {
-    string content = reader.ReadToEnd();
-
-    Console.WriteLine(content);
-
-    var notifications = JsonConvert.DeserializeObject<Notifications>(content);
-
-    foreach(var notification in notifications.Items)
-    {
-      Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
-    }
-  }
-
-  // use deltaquery to query for all updates
-  CheckForUpdates();
-
-  return Ok();
-}
-```
-
-A `Post` continuación, el método `CheckForUpdates` llamará cuando se reciba una notificación. Debajo del `Post` método, agregue los dos nuevos métodos siguientes:
+Este código incluye un nuevo método, `CheckForUpdates()`, que llama a Microsoft Graph con la dirección URL Delta y, a continuación, se recorren los resultados `deltalink` hasta que encuentra un nuevo en la página final de resultados. Almacena la dirección URL en la memoria hasta que se notifica de nuevo al código cuando se desencadena otra notificación.
 
 ```csharp
 private static object DeltaLink = null;
@@ -57,15 +26,15 @@ private void CheckForUpdates()
   // go through all of the pages so that we can get the delta link on the last page.
   while (users.NextPageRequest != null)
   {
-      users = users.NextPageRequest.GetAsync().Result;
-      OutputUsers(users);
+    users = users.NextPageRequest.GetAsync().Result;
+    OutputUsers(users);
   }
 
   object deltaLink;
 
   if (users.AdditionalData.TryGetValue("@odata.deltaLink", out deltaLink))
   {
-      DeltaLink = deltaLink;
+    DeltaLink = deltaLink;
   }
 }
 
@@ -103,19 +72,57 @@ private IUserDeltaCollectionPage GetUsers(GraphServiceClient graphClient, object
 }
 ```
 
-El `CheckForUpdates` método llama al gráfico usando la dirección URL Delta y, a continuación, recorre los resultados hasta `deltalink` que encuentra un nuevo en la página final de los resultados. Almacena la dirección URL en la memoria hasta que se notifica de nuevo al código cuando se desencadena otra notificación.
+Busque el método `Post()` existente y reemplácelo con el código siguiente:
+
+```csharp
+public ActionResult<string> Post([FromQuery]string validationToken = null)
+{
+  // handle validation
+  if(!string.IsNullOrEmpty(validationToken))
+  {
+    Console.WriteLine($"Received Token: '{validationToken}'");
+    return Ok(validationToken);
+  }
+
+  // handle notifications
+  using (StreamReader reader = new StreamReader(Request.Body))
+  {
+    string content = reader.ReadToEnd();
+
+    Console.WriteLine(content);
+
+    var notifications = JsonConvert.DeserializeObject<Notifications>(content);
+
+    foreach(var notification in notifications.Items)
+    {
+      Console.WriteLine($"Received notification: '{notification.Resource}', {notification.ResourceData?.Id}");
+    }
+  }
+
+  // use deltaquery to query for all updates
+  CheckForUpdates();
+
+  return Ok();
+}
+```
+
+A `Post` continuación, el método `CheckForUpdates` llamará cuando se reciba una notificación. Debajo del `Post` método, agregue los dos nuevos métodos siguientes:
 
 **Guarde** todos los archivos.
 
-Seleccione **Depurar > iniciar** depuración para ejecutar la aplicación. Después de compilar la aplicación, se abrirá una ventana del explorador en una página de 404. Esto es correcto porque nuestra aplicación es una API y no una página web.
+### <a name="test-your-changes"></a>Pruebe los cambios:
 
-Para suscribirse a las notificaciones de cambios para los usuarios, `http://localhost:5000/api/notifications`navegue a la siguiente dirección URL.
+En Visual Studio Code, seleccione **Depurar > iniciar** depuración para ejecutar la aplicación.
+Navegue a la siguiente dirección URL **http://localhost:5000/api/notifications**:. Se registrará una nueva suscripción.
 
-Abra un explorador y visite el [centro de administración de Microsoft 365](https://admin.microsoft.com/AdminPortal). Inicie sesión con una cuenta de administrador. Seleccione **usuarios > usuarios activos**. Seleccione un usuario activo y seleccione **Editar** en su **información de contacto**. Actualice el valor del **teléfono móvil** con un número nuevo y seleccione **Guardar**.
+Abra un explorador y vaya al [centro de administración de Microsoft 365https://admin.microsoft.com/AdminPortal)(](https://admin.microsoft.com/AdminPortal).
 
-![Captura de pantalla de los detalles del usuario](./images/10.png)
+1. Si se le pide que inicie sesión, inicie sesión con una cuenta de administrador.
+1. Seleccione **usuarios > usuarios activos**. 
+1. Seleccione un usuario activo y seleccione **Editar** en su **información de contacto**. 
+1. Actualice el valor del **teléfono móvil** con un número nuevo y seleccione **Guardar**.
 
-Espere a que se reciba la notificación como se indica en la **consola** de depuración de la siguiente manera:
+Espere a que se reciba la notificación como se indica en la **consola**de depuración de Visual Studio:
 
 ```shell
 Received notification: 'Users/7a7fded6-0269-42c2-a0be-512d58da4463', 7a7fded6-0269-42c2-a0be-512d58da4463
@@ -156,7 +163,7 @@ User: d4e3a3e0-72e9-41a6-9538-c23e10a16122,   Removed?:deleted
 Got deltalink
 ```
 
-En el portal de administración de usuarios vuelva a editar el usuario y **guárdelo** con otro número de teléfono móvil.
+En el portal de administración de Microsoft 365, repita el proceso de edición de un usuario y vuelva a **Guardar** .
 
 La aplicación recibirá otra notificación y volverá a consultar el gráfico con el último vínculo Delta que ha recibido. Sin embargo, en esta ocasión verá que solo el usuario modificado se ha devuelto en los resultados.
 

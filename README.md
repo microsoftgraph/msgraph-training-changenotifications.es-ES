@@ -16,21 +16,23 @@ En este laboratorio, creará una aplicación de consola principal de .NET que re
 
 ## <a name="watch-the-module"></a>Ver el módulo
 
-Este módulo se ha registrado y está disponible en el canal de YouTube de desarrollo de Office: notificaciones de [cambios y seguimiento de cambios con Microsoft Graph](https://youtu.be/MvJ15BHTdHA)
+Este módulo se ha registrado y está disponible en el canal de YouTube de desarrollo de Office: notificaciones de [cambios y seguimiento de cambios con Microsoft Graph](https://youtu.be/fThiCZmIcMQ)
 
 ## <a name="contributors"></a>Colaboradores
 
-| Roles                | Autores (es)                                               |
-| -------------------- | ------------------------------------------------------- |
-| Manuales de laboratorio/diapositivas | Andrew Connell (MVP de Microsoft, Voitanos) @andrewconnell |
-| Patrocinador/soporte técnico    | Jeremy Thake (Microsoft) @jthake                        |
+|        Roles         |                                       Autores (es)                                       |
+| -------------------- | ------------------------------------------------------------------------------------- |
+| Manuales de laboratorio/diapositivas | Andrew Connell (MVP de Microsoft, Voitanos) [@andrewconnell](//github.com/andrewconnell) |
+| Patrocinador/soporte técnico    | Jeremy Thake (Microsoft) [@jthake](//github.com/jthake)                               |
 
 ## <a name="version-history"></a>Historial de versiones
 
-| Versión | Fecha           | Comentarios             |
-| ------- | -------------- | -------------------- |
-| 1.1     | 9 de abril de 2019 | Vínculo de screencast agregado |
-| 1.0     | 14 de marzo de 2019 | Nuevo módulo enviado |
+| Versión |      Fecha      |                     Comentarios                     |
+| ------- | -------------- | ------------------------------------------------ |
+| 1.3     | 18 de junio de 2019  | Se actualizó el archivo Léame en grabación de screencast actualizada |
+| 1.2     | 30 de mayo de 2019   | Actualización del contenido de Fy2019Q4                         |
+| 1.1     | 9 de abril de 2019  | Vínculo de screencast agregado                            |
+| 1.0     | 14 de marzo de 2019 | Nuevo módulo enviado                             |
 
 ## <a name="disclaimer"></a>Aviso de declinación de responsabilidades
 

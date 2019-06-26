@@ -16,7 +16,7 @@ En este laboratorio, creará una aplicación de consola principal de .NET que re
 
 ## <a name="prerequisites"></a>Requisitos previos
 
-Antes de iniciar este tutorial, debe tener instalado [.net Core 2,2 SDK](https://dotnet.microsoft.com/download) y [Visual Studio Code](https://code.visualstudio.com/) en el equipo de desarrollo. Si no están instalados, visite los vínculos anteriores de opciones de descarga.
+Antes de iniciar este tutorial, debe tener instalado [.net Core 2,2 SDK](https://dotnet.microsoft.com/download) y [Visual Studio Code](https://code.visualstudio.com/) en el equipo de desarrollo. 
 
 ## <a name="completed-exercises"></a>Ejercicios completados
 

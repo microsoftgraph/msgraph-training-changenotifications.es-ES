@@ -7,10 +7,20 @@ Este tutorial le enseña a crear una aplicación principal .NET que use la API d
 
 ## <a name="prerequisites"></a>Requisitos previos
 
-Antes de iniciar este tutorial, debe tener instalado [.net Core 2,2 SDK](https://dotnet.microsoft.com/download) y [Visual Studio Code](https://code.visualstudio.com/) en el equipo de desarrollo. Si no están instalados, visite los vínculos anteriores de opciones de descarga.
+Antes de iniciar este tutorial, debe tener instalado [.net Core 2,2 SDK](https://dotnet.microsoft.com/download) y [Visual Studio Code](https://code.visualstudio.com/) en el equipo de desarrollo.
 
 > [!NOTE]
 > Este tutorial se ha escrito con .NET Core versión 2,2. Los pasos de esta guía pueden funcionar con otras versiones, pero no se han probado.
+
+## <a name="watch-the-tutorial"></a>Vea el tutorial
+
+Este módulo se ha registrado y está disponible en el canal de YouTube de desarrollo de Office.
+
+<!-- markdownlint-disable MD033 MD034 -->
+<br/>
+
+> [!VIDEO https://www.youtube-nocookie.com/embed/fThiCZmIcMQ]
+<!-- markdownlint-enable MD033 MD034 -->
 
 ## <a name="feedback"></a>Comentarios
 
