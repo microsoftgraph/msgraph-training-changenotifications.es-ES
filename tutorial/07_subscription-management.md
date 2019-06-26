@@ -1,50 +1,17 @@
 <!-- markdownlint-disable MD002 MD041 -->
 
-<span data-ttu-id="c7da3-101">Las suscripciones de las notificaciones expiran y deben renovarse de forma periódica.</span><span class="sxs-lookup"><span data-stu-id="c7da3-101">Subscriptions for notifications expire and need to be renewed periodically.</span></span>
+<span data-ttu-id="d837a-101">Las suscripciones de las notificaciones expiran y deben renovarse de forma periódica.</span><span class="sxs-lookup"><span data-stu-id="d837a-101">Subscriptions for notifications expire and need to be renewed periodically.</span></span> <span data-ttu-id="d837a-102">Los pasos siguientes mostrarán cómo renovar las notificaciones</span><span class="sxs-lookup"><span data-stu-id="d837a-102">The following steps will demonstrate how to renew notifications</span></span>
 
-<span data-ttu-id="c7da3-102">Abra **NotificationsController.CS** y reemplace el `Get()` método con el código siguiente:</span><span class="sxs-lookup"><span data-stu-id="c7da3-102">Open **NotificationsController.cs** and replace the `Get()` method with the following code:</span></span>
+<span data-ttu-id="d837a-103">Abrir **controladores > archivo NotificationsController.CS**</span><span class="sxs-lookup"><span data-stu-id="d837a-103">Open **Controllers > NotificationsController.cs** file</span></span>
+
+<span data-ttu-id="d837a-104">Agregue las dos declaraciones de miembro siguientes a la `NotificationsController` clase:</span><span class="sxs-lookup"><span data-stu-id="d837a-104">Add the following two member declarations to the `NotificationsController` class:</span></span>
 
 ```csharp
 private static Dictionary<string, Subscription> Subscriptions = new Dictionary<string, Subscription>();
 private static Timer subscriptionTimer = null;
-
-[HttpGet]
-public ActionResult<string> Get()
-{
-  var graphServiceClient = GetGraphClient();
-
-  var sub = new Microsoft.Graph.Subscription();
-  sub.ChangeType = "updated";
-  sub.NotificationUrl = config.Ngrok + "/api/notifications";
-  sub.Resource = "/users";
-  sub.ExpirationDateTime = DateTime.UtcNow.AddMinutes(5);
-  sub.ClientState = "SecretClientState";
-
-  var newSubscription = graphServiceClient
-    .Subscriptions
-    .Request()
-    .AddAsync(sub).Result;
-
-  Subscriptions[newSubscription.Id] = newSubscription;
-
-  if(subscriptionTimer == null)
-  {
-      subscriptionTimer = new Timer(CheckSubscriptions, null, 5000, 15000);
-  }
-
-  return $"Subscribed. Id: {newSubscription.Id}, Expiration: {newSubscription.ExpirationDateTime}";
-}
 ```
 
-<span data-ttu-id="c7da3-103">Agregue la siguiente instrucción using en la parte superior del archivo.</span><span class="sxs-lookup"><span data-stu-id="c7da3-103">Add the following using statement at the top of the file.</span></span>
-
-```csharp
-using System.Threading;
-```
-
-<span data-ttu-id="c7da3-104">Este código anterior agrega un temporizador en segundo plano que se activará cada 15 segundos y comprobará las suscripciones para ver si han expirado.</span><span class="sxs-lookup"><span data-stu-id="c7da3-104">This code above adds a background timer that will fire every 15 seconds and check subscriptions to see if they have expired.</span></span>
-
-<span data-ttu-id="c7da3-105">Agregue los siguientes métodos nuevos:</span><span class="sxs-lookup"><span data-stu-id="c7da3-105">Add the following new methods:</span></span>
+<span data-ttu-id="d837a-105">Agregue los siguientes métodos nuevos.</span><span class="sxs-lookup"><span data-stu-id="d837a-105">Add the following new methods.</span></span> <span data-ttu-id="d837a-106">Estos implementarán un temporizador en segundo plano que se ejecutará cada 15 segundos para comprobar si las suscripciones han expirado.</span><span class="sxs-lookup"><span data-stu-id="d837a-106">These will implement a background timer that will run every 15 seconds to check if subscriptions have expired.</span></span> <span data-ttu-id="d837a-107">Si es así, se renovarán.</span><span class="sxs-lookup"><span data-stu-id="d837a-107">If they have, they will be renewed.</span></span>
 
 ```csharp
 private void CheckSubscriptions(Object stateInfo)
@@ -81,21 +48,63 @@ private void RenewSubscription(Subscription subscription)
 }
 ```
 
-<span data-ttu-id="c7da3-106">El `CheckSubscriptions` temporizador llama al método cada 15 segundos.</span><span class="sxs-lookup"><span data-stu-id="c7da3-106">The `CheckSubscriptions` method is called every 15 seconds by the timer.</span></span> <span data-ttu-id="c7da3-107">Para el uso de producción, debe establecerse en un valor más razonable para reducir el número de llamadas innecesarias a Graph.</span><span class="sxs-lookup"><span data-stu-id="c7da3-107">For production use this should be set to a more reasonable value to reduce the number of unnecessary calls to Graph.</span></span> <span data-ttu-id="c7da3-108">El `RenewSubscription` método renueva una suscripción y solo se llama si una suscripción va a expirar en los próximos dos minutos.</span><span class="sxs-lookup"><span data-stu-id="c7da3-108">The `RenewSubscription` method renews a subscription and is only called if a subscription is going to expire in the next two minutes.</span></span>
+<span data-ttu-id="d837a-108">El `CheckSubscriptions` temporizador llama al método cada 15 segundos.</span><span class="sxs-lookup"><span data-stu-id="d837a-108">The `CheckSubscriptions` method is called every 15 seconds by the timer.</span></span> <span data-ttu-id="d837a-109">Para el uso de producción, debe establecerse en un valor más razonable para reducir el número de llamadas innecesarias a Microsoft Graph.</span><span class="sxs-lookup"><span data-stu-id="d837a-109">For production use this should be set to a more reasonable value to reduce the number of unnecessary calls to Microsoft Graph.</span></span>
 
-<span data-ttu-id="c7da3-109">Seleccione **Depurar > iniciar** depuración para ejecutar la aplicación.</span><span class="sxs-lookup"><span data-stu-id="c7da3-109">Select **Debug > Start debugging** to run the application.</span></span> <span data-ttu-id="c7da3-110">Navegue a la siguiente dirección `*http://localhost:5000/api/notifications` URL para registrar una nueva suscripción.</span><span class="sxs-lookup"><span data-stu-id="c7da3-110">Navigate to the following url `*http://localhost:5000/api/notifications` to register a new subscription.</span></span>
+<span data-ttu-id="d837a-110">El `RenewSubscription` método renueva una suscripción y solo se llama si una suscripción va a expirar en los próximos dos minutos.</span><span class="sxs-lookup"><span data-stu-id="d837a-110">The `RenewSubscription` method renews a subscription and is only called if a subscription is going to expire in the next two minutes.</span></span>
 
-<span data-ttu-id="c7da3-111">Verá el siguiente resultado en la `DEBUG OUTPUT` ventana de Visual Studio Code aproximadamente cada 15 segundos.</span><span class="sxs-lookup"><span data-stu-id="c7da3-111">You will see the following output in the `DEBUG OUTPUT` window of Visual Studio Code approximately every 15 seconds.</span></span>  <span data-ttu-id="c7da3-112">Este es el temporizador que comprueba la suscripción para la expiración.</span><span class="sxs-lookup"><span data-stu-id="c7da3-112">This is the timer checking the subscription for expiry.</span></span>
+<span data-ttu-id="d837a-111">Busque el método `Get()` y reemplácelo con el código siguiente:</span><span class="sxs-lookup"><span data-stu-id="d837a-111">Locate the method `Get()` and replace it with the following code:</span></span>
+
+```csharp
+[HttpGet]
+public ActionResult<string> Get()
+{
+    var graphServiceClient = GetGraphClient();
+
+    var sub = new Microsoft.Graph.Subscription();
+    sub.ChangeType = "updated";
+    sub.NotificationUrl = config.Ngrok + "/api/notifications";
+    sub.Resource = "/users";
+    sub.ExpirationDateTime = DateTime.UtcNow.AddMinutes(5);
+    sub.ClientState = "SecretClientState";
+
+    var newSubscription = graphServiceClient
+      .Subscriptions
+      .Request()
+      .AddAsync(sub).Result;
+
+    Subscriptions[newSubscription.Id] = newSubscription;
+
+    if(subscriptionTimer == null)
+    {
+        subscriptionTimer = new Timer(CheckSubscriptions, null, 5000, 15000);
+    }
+
+    return $"Subscribed. Id: {newSubscription.Id}, Expiration: {newSubscription.ExpirationDateTime}";
+}
+```
+
+<span data-ttu-id="d837a-112">Agregue la siguiente instrucción después de las `using` instrucciones existentes en la parte superior del archivo:</span><span class="sxs-lookup"><span data-stu-id="d837a-112">Add the following statement after the existing `using` statements at the top of the file:</span></span>
+
+```csharp
+using System.Threading;
+```
+
+### <a name="test-the-changes"></a><span data-ttu-id="d837a-113">Pruebe los cambios:</span><span class="sxs-lookup"><span data-stu-id="d837a-113">Test the changes:</span></span>
+
+<span data-ttu-id="d837a-114">En Visual Studio Code, seleccione **Depurar > iniciar** depuración para ejecutar la aplicación.</span><span class="sxs-lookup"><span data-stu-id="d837a-114">Within Visual Studio Code, select **Debug > Start debugging** to run the application.</span></span>
+<span data-ttu-id="d837a-115">Navegue a la siguiente dirección URL **http://localhost:5000/api/notifications**:.</span><span class="sxs-lookup"><span data-stu-id="d837a-115">Navigate to the following url: **http://localhost:5000/api/notifications**.</span></span> <span data-ttu-id="d837a-116">Se registrará una nueva suscripción.</span><span class="sxs-lookup"><span data-stu-id="d837a-116">This will register a new subscription.</span></span>
+
+<span data-ttu-id="d837a-117">En la ventana de la **consola** de depuración de Visual Studio, aproximadamente cada 15 segundos, observe el temporizador comprobando que la suscripción ha expirado:</span><span class="sxs-lookup"><span data-stu-id="d837a-117">In the Visual Studio Code **Debug Console** window, approximately every 15 seconds, notice the timer checking the subscription for expiration:</span></span>
 
 ```shell
 Checking subscriptions 12:32:51.882
 Current subscription count 1
 ```
 
-<span data-ttu-id="c7da3-113">Espere unos minutos y verá lo siguiente cuando sea necesario renovar la suscripción:</span><span class="sxs-lookup"><span data-stu-id="c7da3-113">Wait a few minutes and you will see the following when the subscription needs renewing:</span></span>
+<span data-ttu-id="d837a-118">Espere unos minutos y verá lo siguiente cuando sea necesario renovar la suscripción:</span><span class="sxs-lookup"><span data-stu-id="d837a-118">Wait a few minutes and you will see the following when the subscription needs renewing:</span></span>
 
 ```shell
 Renewed subscription: 07ca62cd-1a1b-453c-be7b-4d196b3c6b5b, New Expiration: 3/10/2019 7:43:22 PM +00:00
 ```
 
-<span data-ttu-id="c7da3-114">Esto indica que la suscripción se renovó y muestra la nueva hora de expiración.</span><span class="sxs-lookup"><span data-stu-id="c7da3-114">This indicates that the subscription was renewed and shows the new expiry time.</span></span>
+<span data-ttu-id="d837a-119">Esto indica que la suscripción se renovó y muestra la nueva hora de expiración.</span><span class="sxs-lookup"><span data-stu-id="d837a-119">This indicates that the subscription was renewed and shows the new expiry time.</span></span>
